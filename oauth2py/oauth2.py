@@ -48,7 +48,11 @@ class Oauth2(Base):
 
     def get_user_info(self, query):
         self._check_config()
-        params = self._query_to_dict(query)
+        
+        params = query        
+        if not type(query) is dict:
+            params = self._query_to_dict(query)
+
         self._check_response(params)
         self._get_access_token(params)
         response = self._get_user_info()

@@ -41,7 +41,8 @@ class Base(object):
         r = None
         try:
             r = requests.get(request['url'],
-                             params=request['params'])
+                             params=request['params'],
+                             headers={'Accept': 'application/json'})
         except requests.ConnectionError, e:
             raise AuthorizeException('Connection error: {0}'.format(e))
         else:
@@ -55,7 +56,8 @@ class Base(object):
         r = None
         try:
             r = requests.post(request['url'],
-                              data=request['params'])
+                              data=request['params'],
+                              headers={'Accept': 'application/json'})
         except requests.ConnectionError, e:
             raise AuthorizeException('Connection error: {0}'.format(e))
         else:

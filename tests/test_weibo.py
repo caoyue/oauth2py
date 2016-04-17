@@ -35,7 +35,11 @@ class TestWeibo(unittest.TestCase):
     @mock.patch('oauth2py.base.requests.get')
     def test_get_user_info(self, mock_get, mock_post):
         query = 'code=12345&state=abc'
-
+        # query = {
+        #     'code': '12345',
+        #     'state':'abc'
+        # }
+        
         access_token_resp = {
             'access_token': 'abcdefg',
             'expires_in': '1234567'

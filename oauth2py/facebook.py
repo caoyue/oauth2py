@@ -17,7 +17,7 @@ class Facebook(Oauth2):
     def parse_user_info(self, response):
         print response
         return {
-            'id': response['id'],
+            'uid': response['id'],
             'name': response['name'],
             'avatar': response['picture']['data']['url']
         }
