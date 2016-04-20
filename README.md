@@ -9,6 +9,14 @@ a simple, lightweight oauth client
 
 python 2.7
 
+### supported
+- [x] Weibo
+- [ ] QQ
+- [x] Facebook
+- [x] Github
+- [ ] Twitter
+- [ ] Other...
+
 ### useage
 1. create client
     - put `config.json` in your app folder

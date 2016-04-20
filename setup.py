@@ -21,7 +21,7 @@ config = {
     'author_email': 'i@caoyue.me',
     'url': 'https://github.com/caoyue/oauth2py',
     'download_url': 'https://github.com/caoyue/oauth2py',
-    'license':  'http://www.apache.org/licenses/LICENSE-2.0',
+    'license': 'http://www.apache.org/licenses/LICENSE-2.0',
     'install_requires': [''],
     'packages': ['oauth2py'],
     'classifiers': [
