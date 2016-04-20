@@ -97,7 +97,7 @@ class TestWeibo(unittest.TestCase):
             u'screen_name': u'c4oyu3',
             u'url': u'',
             u'gender': u'm',
-            u'created_at':   u'Wed Dec 16 22:18:14   +0800 2009',
+            u'created_at':   u'Wed Dec 16 22:18:14 +0800 2009',
             u'verified_type': -1,
             u'following': False,
             u'pagefriends_count': 0,

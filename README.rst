@@ -1,6 +1,9 @@
 oauth2py
 ~~~~~~~~
 
+| |PyPI version|
+| |Build Status|
+
 a simple, lightweight oauth client
 
 require
@@ -80,3 +83,8 @@ add providers
                'avatar': response['avatar_url'],
                'raw': response
            }
+
+.. |PyPI version| image:: https://img.shields.io/pypi/v/oauth2py.svg?style=flat
+   :target: https://pypi.python.org/pypi/oauth2py
+.. |Build Status| image:: https://img.shields.io/travis/shadowsocks/shadowsocks/master.svg?style=flat
+   :target: https://travis-ci.org/caoyue/oauth2py
