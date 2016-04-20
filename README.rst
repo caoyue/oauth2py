@@ -17,7 +17,7 @@ supported
 -  [ ] QQ
 -  [x] Facebook
 -  [x] Github
--  [ ] Twitter
+-  [x] Twitter
 -  [ ] Other…
 
 useage

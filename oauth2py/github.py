@@ -16,8 +16,8 @@ class Github(Oauth2):
 
     def parse_user_info(self, response):
         return {
-            'uid': response['id'],
-            'name': response['name'],
-            'avatar': response['avatar_url'],
+            'uid': response.get('id'),
+            'name': response.get('name'),
+            'avatar': response.get('avatar_url'),
             'raw': response
         }

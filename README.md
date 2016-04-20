@@ -14,7 +14,7 @@ python 2.7
 - [ ] QQ
 - [x] Facebook
 - [x] Github
-- [ ] Twitter
+- [x] Twitter
 - [ ] Other...
 
 ### useage

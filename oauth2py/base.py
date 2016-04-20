@@ -34,15 +34,16 @@ class Base(object):
     def get(self, request):
         r = None
         try:
-            r = requests.get(request['url'],
-                             params=request['params'],
-                             headers={'Accept': 'application/json'})
+            r = requests.get(request.get('url'),
+                             params=request.get('params'),
+                             headers={'Accept': 'application/json'},
+                             auth=request.get('auth'))
         except requests.ConnectionError, e:
             raise AuthorizeException('Connection error: {0}'.format(e))
         else:
             if r.status_code != 200:
                 raise AuthorizeException(
-                    'Authorization failed: {0}'.format(r.json()))
+                    'Authorization failed: {0}'.format(r.content))
 
         try:
             return r.json()
@@ -52,15 +53,16 @@ class Base(object):
     def post(self, request):
         r = None
         try:
-            r = requests.post(request['url'],
-                              data=request['params'],
-                              headers={'Accept': 'application/json'})
+            r = requests.post(request.get('url'),
+                              data=request.get('params'),
+                              headers={'Accept': 'application/json'},
+                              auth=request.get('auth'))
         except requests.ConnectionError, e:
             raise AuthorizeException('Connection error: {0}'.format(e))
         else:
             if r.status_code != 200:
                 raise AuthorizeException(
-                    'Authorization failed: {0}'.format(r.json()))
+                    'Authorization failed: {0}'.format(r.content))
 
         try:
             return r.json()
@@ -70,8 +72,8 @@ class Base(object):
     def _build_request_uri(self, request):
         params = '&'.join(
             ['{0}={1}'.format(x, y)
-             for x, y in request['params'].iteritems()])
-        return '{0}?{1}'.format(request['url'], params)
+             for x, y in request.get('params').iteritems()])
+        return '{0}?{1}'.format(request.get('url'), params)
 
     def _query_to_dict(self, query):
         return {x.split('=')[0]: x.split('=')[1]

@@ -60,12 +60,14 @@ class TestGithub(unittest.TestCase):
     def test_get_login_url(self):
         self.assertEqual(
             self.github.get_login_url(),
-            'https://github.com/login/oauth/authorize?redirect_uri=http://127.0.0.1/oauth/github/callback&response_type=code&client_id=1234567'
+            'https://github.com/login/oauth/authorize?redirect_uri={0}&response_type=code&client_id={1}'.format(
+                self.config['redirect_uri'], self.config['client_id'])
         )
 
         self.assertEqual(
             self.github.get_login_url(state='abc'),
-            'https://github.com/login/oauth/authorize?state=abc&redirect_uri=http://127.0.0.1/oauth/github/callback&response_type=code&client_id=1234567'
+            'https://github.com/login/oauth/authorize?state=abc&redirect_uri={0}&response_type=code&client_id={1}'.format(
+                self.config['redirect_uri'], self.config['client_id'])
         )
 
     @mock.patch('oauth2py.base.requests.post')

@@ -109,12 +109,14 @@ class TestWeibo(unittest.TestCase):
     def test_get_login_url(self):
         self.assertEqual(
             self.weibo.get_login_url(),
-            'https://api.weibo.com/oauth2/authorize?redirect_uri=http://127.0.0.1/oauth/weibo/callback&response_type=code&client_id=1234567'
+            'https://api.weibo.com/oauth2/authorize?redirect_uri={0}&response_type=code&client_id={1}'.format(
+                self.config['redirect_uri'], self.config['client_id'])
         )
 
         self.assertEqual(
             self.weibo.get_login_url(state='abc'),
-            'https://api.weibo.com/oauth2/authorize?state=abc&redirect_uri=http://127.0.0.1/oauth/weibo/callback&response_type=code&client_id=1234567'
+            'https://api.weibo.com/oauth2/authorize?state=abc&redirect_uri={0}&response_type=code&client_id={1}'.format(
+                self.config['redirect_uri'], self.config['client_id'])
         )
 
     @mock.patch('oauth2py.base.requests.post')

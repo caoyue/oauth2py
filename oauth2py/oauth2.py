@@ -72,7 +72,7 @@ class Oauth2(Base):
         raise NotImplementedError('Must implement in subclass')
 
     def _check_response(self, params):
-        if params.get('error'):
+        if params.get('error', ''):
             raise OauthException(
                 'Authorization failed: {0}'.format(params['error']))
 
