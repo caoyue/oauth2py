@@ -18,7 +18,6 @@ python 2.7
 
     ```python
     github.init({
-        'name': 'github',
         'client_id': '',
         'client_secret': '',
         'redirect_uri': '',

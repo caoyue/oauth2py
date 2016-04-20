@@ -1,0 +1,82 @@
+oauth2py
+~~~~~~~~
+
+a simple, lightweight oauth client
+
+require
+~~~~~~~
+
+python 2.7
+
+useage
+~~~~~~
+
+#. create client
+
+   -  put ``config.json`` in your app folder
+
+   .. code:: python
+
+       from oauth2py.client import OauthClient as oauth
+
+       github = oauth.load('github')
+
+   -  or set config in code
+
+   .. code:: python
+
+       github.init({
+           'client_id': '',
+           'client_secret': '',
+           'redirect_uri': '',
+           'scope': ''
+       })
+
+#. get login url
+
+   .. code:: python
+
+       url = github.get_login_url(state='abc')
+
+#. get user info
+
+   .. code:: python
+
+       user = github.get_user_info('code=12345&state=abc')
+       # or
+       user = github.get_user_info({'code': '12345', 'state': 'abc'})
+
+#. get access token
+
+   .. code:: python
+
+       token = github.get_access_token()
+
+add providers
+~~~~~~~~~~~~~
+
+-  inherit ``oauth2py.Oauth2`` and set oauth urls
+
+   .. code:: python
+
+       class Github(Oauth2):
+
+           NAME = 'Github'
+           AUTHORIZATION_URL = 'https://github.com/login/oauth/authorize'
+           ACCESS_TOKEN_URL = 'https://github.com/login/oauth/access_token'
+           GET_USERINFO_URL = 'https://api.github.com/user'
+
+           def __init__(self):
+               super(Github, self).__init__()
+
+-  parse user info from response
+
+   .. code:: python
+
+       def parse_user_info(self, response):
+           return {
+               'uid': response['id'],
+               'name': response['name'],
+               'avatar': response['avatar_url'],
+               'raw': response
+           }
