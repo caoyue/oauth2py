@@ -6,7 +6,7 @@ a simple, lightweight oauth client
 python 2.7
 
 ### useage
-1. create client  
+1. create client
     - put `config.json` in your app folder
 
     ```python
@@ -14,7 +14,7 @@ python 2.7
 
     github = oauth.load('github')
     ```
-    - or set config in code 
+    - or set config in code
 
     ```python
     github.init({
@@ -40,6 +40,12 @@ python 2.7
     user = github.get_user_info({'code': '12345', 'state': 'abc'})
     ```
 
+4. get access token
+
+    ```python
+    token = github.get_access_token()
+    ```
+
 ### add providers
 - inherit `oauth2py.Oauth2` and set oauth urls
 
@@ -62,6 +68,8 @@ python 2.7
     def parse_user_info(self, response):
         return {
             'uid': response['id'],
-            'name': response['name']
+            'name': response['name'],
+            'avatar': response['avatar_url'],
+            'raw': response
         }
     ```

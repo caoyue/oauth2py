@@ -14,6 +14,11 @@ class Facebook(Oauth2):
     def __init__(self):
         super(Facebook, self).__init__()
 
+    def parse_token_response(self, response):
+        r = self._query_to_dict(response)
+        self._access_token = r.get('access_token', '')
+        self._expires_in = r.get('expires', '')
+
     def parse_user_info(self, response):
         return {
             'uid': response['id'],

@@ -31,12 +31,6 @@ class Base(object):
     def get_user_info(self):
         raise NotImplementedError('Must implement in subclass')
 
-    def build_request_uri(self, request):
-        params = '&'.join(
-            ['{0}={1}'.format(x, y)
-             for x, y in request['params'].iteritems()])
-        return '{0}?{1}'.format(request['url'], params)
-
     def get(self, request):
         r = None
         try:
@@ -50,7 +44,10 @@ class Base(object):
                 raise AuthorizeException(
                     'Authorization failed: {0}'.format(r.json()))
 
-        return r.json()
+        try:
+            return r.json()
+        except ValueError, e:
+            return r.content
 
     def post(self, request):
         r = None
@@ -65,7 +62,16 @@ class Base(object):
                 raise AuthorizeException(
                     'Authorization failed: {0}'.format(r.json()))
 
-        return r.json()
+        try:
+            return r.json()
+        except ValueError, e:
+            return r.content
+
+    def _build_request_uri(self, request):
+        params = '&'.join(
+            ['{0}={1}'.format(x, y)
+             for x, y in request['params'].iteritems()])
+        return '{0}?{1}'.format(request['url'], params)
 
     def _query_to_dict(self, query):
         return {x.split('=')[0]: x.split('=')[1]

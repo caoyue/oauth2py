@@ -17,36 +17,12 @@ class TestWeibo(unittest.TestCase):
             'redirect_uri': 'http://127.0.0.1/oauth/weibo/callback',
             'scope': ''
         }
-        self.weibo = OauthClient.load('weibo')
-        self.weibo.init(self.config)
-
-    def test_get_login_url(self):
-        self.assertEqual(
-            self.weibo.get_login_url(),
-            'https://api.weibo.com/oauth2/authorize?redirect_uri=http://127.0.0.1/oauth/weibo/callback&response_type=code&client_id=1234567'
-        )
-
-        self.assertEqual(
-            self.weibo.get_login_url(state='abc'),
-            'https://api.weibo.com/oauth2/authorize?state=abc&redirect_uri=http://127.0.0.1/oauth/weibo/callback&response_type=code&client_id=1234567'
-        )
-
-    @mock.patch('oauth2py.base.requests.post')
-    @mock.patch('oauth2py.base.requests.get')
-    def test_get_user_info(self, mock_get, mock_post):
-        query = 'code=12345&state=abc'
-        # query = {
-        #     'code': '12345',
-        #     'state':'abc'
-        # }
-
-        access_token_resp = {
+        self.access_token_resp = {
             'access_token': 'abcdefg',
             'expires_in': '1234567',
             'uid': '12345'
         }
-
-        uid_resp = {
+        self.user_info_resp = {
             u'status': {
                 u'reposts_count': 0,
                 u'mlevel': 0,
@@ -127,14 +103,36 @@ class TestWeibo(unittest.TestCase):
             u'pagefriends_count': 0,
             u'user_ability': 0
         }
+        self.weibo = OauthClient.load('weibo')
+        self.weibo.init(self.config)
+
+    def test_get_login_url(self):
+        self.assertEqual(
+            self.weibo.get_login_url(),
+            'https://api.weibo.com/oauth2/authorize?redirect_uri=http://127.0.0.1/oauth/weibo/callback&response_type=code&client_id=1234567'
+        )
+
+        self.assertEqual(
+            self.weibo.get_login_url(state='abc'),
+            'https://api.weibo.com/oauth2/authorize?state=abc&redirect_uri=http://127.0.0.1/oauth/weibo/callback&response_type=code&client_id=1234567'
+        )
+
+    @mock.patch('oauth2py.base.requests.post')
+    @mock.patch('oauth2py.base.requests.get')
+    def test_get_user_info(self, mock_get, mock_post):
+        query = 'code=12345&state=abc'
+        # query = {
+        #     'code': '12345',
+        #     'state':'abc'
+        # }
 
         mock_get_response = mock.Mock()
         mock_get_response.status_code = 200
-        mock_get_response.json.return_value = uid_resp
+        mock_get_response.json.return_value = self.user_info_resp
 
         mock_post_response = mock.Mock()
         mock_post_response.status_code = 200
-        mock_post_response.json.return_value = access_token_resp
+        mock_post_response.json.return_value = self.access_token_resp
 
         mock_get.return_value = mock_get_response
         mock_post.return_value = mock_post_response
@@ -148,10 +146,11 @@ class TestWeibo(unittest.TestCase):
         self.assertEqual(self.weibo.state, 'abc')
 
         # assert access token
+        token = self.weibo.get_access_token()
         self.assertEqual(
-            self.weibo.get_access_token()['access_token'],
-            access_token_resp['access_token']
+            token['access_token'],
+            self.access_token_resp['access_token']
         )
 
         # assert response uid
-        self.assertEqual(user['uid'], uid_resp['id'])
+        self.assertEqual(user['uid'], self.user_info_resp['id'])

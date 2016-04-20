@@ -27,7 +27,7 @@ class Oauth2(Base):
         if state:
             payload['state'] = state
 
-        return self.build_request_uri({
+        return self._build_request_uri({
             'url': self.AUTHORIZATION_URL,
             'params': payload
         })
@@ -48,8 +48,8 @@ class Oauth2(Base):
 
     def get_user_info(self, query):
         self._check_config()
-        
-        params = query        
+
+        params = query
         if not type(query) is dict:
             params = self._query_to_dict(query)
 
@@ -57,6 +57,16 @@ class Oauth2(Base):
         self._get_access_token(params)
         response = self._get_user_info()
         return self.parse_user_info(response)
+
+    def parse_token_response(self, response):
+        self._access_token = response.get('access_token', '')
+        self._expires_in = response.get('expires_in', '')
+        self._refresh_token = response.get('refresh_token', '')
+
+    def set_resource_payload(self):
+        return {
+            'access_token': self._access_token
+        }
 
     def parse_user_info(self, response):
         raise NotImplementedError('Must implement in subclass')
@@ -82,14 +92,10 @@ class Oauth2(Base):
             'params': params
         })
 
-        self._access_token = r.get('access_token', '')
-        self._expires_in = r.get('expires_in', '')
-        self._refresh_token = r.get('refresh_token', '')
+        self.parse_token_response(r)
 
     def _get_user_info(self):
-        payload = {
-            'access_token': self._access_token
-        }
+        payload = self.set_resource_payload()
         return self.get({
             'url': self.GET_USERINFO_URL,
             'params': payload
