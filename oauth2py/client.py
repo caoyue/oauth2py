@@ -6,9 +6,9 @@ import json
 
 def get_configs():
     import os
-    if os.path.isfile('config.json'):
+    if os.path.isfile('oauth2py.config.json'):
         try:
-            with open('config.json') as data:
+            with open('oauth2py.config.json') as data:
                 return json.load(data)
         except Exception, e:
             raise 'could not load configs!'

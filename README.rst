@@ -25,7 +25,7 @@ useage
 
 #. create client
 
-    -  put ``config.json`` in your app folder
+    -  put ``oauth2py.config.json`` in your app folder
 
     .. code:: python
 
