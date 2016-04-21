@@ -13,6 +13,7 @@ class Oauth(Base):
         self._oauth = None
 
     def get_login_url(self):
+        self._check_config()
         self._request_token = self._get_request_token()
         return '{0}?oauth_token={1}'.format(
             self.AUTHENTICATE_URL,
@@ -80,6 +81,8 @@ class Oauth(Base):
         self._access_token_secret = access_token['access_token_secret']
 
     def access_resource(self, method, url, params={}, data={}):
+        self._check_config()
+
         oauth = OAuth1(
             client_key=self._config['client_id'],
             client_secret=self._config['client_secret'],

@@ -31,7 +31,7 @@ class TestClient(unittest.TestCase):
         )
 
     def test_load_config_from_file(self):
-        with open('oauth2py.config.json', 'w') as f:
+        with open('tests/oauth2py.json', 'w') as f:
             f.write(json.dumps([self.config]))
 
         client.reload_configs()
@@ -42,5 +42,5 @@ class TestClient(unittest.TestCase):
         )
 
     def tearDown(self):
-        if os.path.isfile('oauth2py.config.json'):
-            os.remove('oauth2py.config.json')
+        if os.path.isfile('tests/oauth2py.json'):
+            os.remove('tests/oauth2py.json')

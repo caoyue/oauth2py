@@ -76,6 +76,8 @@ class Oauth2(Base):
         self._expires_in = access_token.get('expires_in')
 
     def access_resource(self, method, url, params={}, data={}):
+        self._check_config()
+
         params['access_token'] = self._access_token
 
         r = None

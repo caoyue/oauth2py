@@ -19,7 +19,7 @@ python 2.7
 
 ### useage
 1. create client
-    - put `oauth2py.config.json` in your app folder
+    - put `oauth2py.json` in your app root folder
 
     ```json
     [{

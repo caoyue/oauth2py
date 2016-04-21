@@ -1,14 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import sys
+import os
 import json
 
 
 def get_configs():
-    import os
-    if os.path.isfile('oauth2py.config.json'):
+    f = os.path.join(sys.path[0], 'oauth2py.json')
+    if os.path.isfile(f):
         try:
-            with open('oauth2py.config.json') as data:
+            with open(f) as data:
                 return json.load(data)
         except Exception, e:
             raise 'could not load configs!'

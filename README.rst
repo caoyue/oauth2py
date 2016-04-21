@@ -26,7 +26,7 @@ useage
 
 #. create client
 
-   -  put ``oauth2py.config.json`` in your app folder
+   -  put ``oauth2py.json`` in your app root folder
 
    .. code:: json
 
@@ -89,13 +89,12 @@ useage
 
    -  get github repo list
 
-      .. code:: python
-
-          github.set_access_token({
-          'access_token': '...'
-          })
-          github.access_resource(
-              'GET', 'https://api.github.com/user/repos')
+   .. code:: python
+       github.set_access_token({
+       'access_token': '...'
+       })
+       github.access_resource(
+           'GET', 'https://api.github.com/user/repos')
 
    -  another example: post status to twitter
 
