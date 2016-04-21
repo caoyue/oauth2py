@@ -15,21 +15,21 @@ class Oauth2(Base):
     def get_login_url(self, state=''):
         self._check_config()
 
-        payload = {
+        params = {
             'client_id': self._config['client_id'],
             'redirect_uri': self._config['redirect_uri'],
             'response_type': 'code'
         }
 
         if self._config['scope']:
-            payload['scope'] = self._config['scope']
+            params['scope'] = self._config['scope']
 
         if state:
-            payload['state'] = state
+            params['state'] = state
 
         return self._build_request_uri({
             'url': self.AUTHORIZATION_URL,
-            'params': payload
+            'params': params
         })
 
     def get_access_token(self, refresh_token=''):
@@ -63,13 +63,42 @@ class Oauth2(Base):
         self._expires_in = response.get('expires_in', '')
         self._refresh_token = response.get('refresh_token', '')
 
-    def set_resource_payload(self):
+    def get_user_info_params(self):
         return {
             'access_token': self._access_token
         }
 
     def parse_user_info(self, response):
         raise NotImplementedError('Must implement in subclass')
+
+    def set_access_token(self, access_token):
+        self._access_token = access_token['access_token']
+        self._expires_in = access_token.get('expires_in')
+
+    def access_resource(self, method, url, params={}, data={}):
+        params['access_token'] = self._access_token
+
+        r = None
+        if method.lower() == 'get':
+            r = self._get({
+                'url': url,
+                'params': params
+            })
+        elif method.lower() == 'post':
+            r = self._post({
+                'url': url,
+                'params': params,
+                'data': data
+            })
+        else:
+            r = self._request({
+                'method': method,
+                'url': url,
+                'params': params,
+                'data': data
+            })
+
+        return r
 
     def _check_response(self, params):
         if params.get('error', ''):
@@ -87,16 +116,16 @@ class Oauth2(Base):
         if grant_type != 'authorization_code':
             params['refresh_token'] = self._refresh_token
 
-        r = self.post({
+        r = self._post({
             'url': self.ACCESS_TOKEN_URL,
-            'params': params
+            'data': params
         })
 
         self.parse_token_response(r)
 
     def _get_user_info(self):
-        payload = self.set_resource_payload()
-        return self.get({
+        params = self.get_user_info_params()
+        return self._get({
             'url': self.GET_USERINFO_URL,
-            'params': payload
+            'params': params
         })

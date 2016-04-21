@@ -34,7 +34,7 @@ class Oauth(Base):
                 verifier=verifier
             )
 
-            r = self.post({
+            r = self._post({
                 'url': self.ACCESS_TOKEN_URL,
                 'auth': oauth
             })
@@ -66,7 +66,7 @@ class Oauth(Base):
             resource_owner_secret=self._access_token_secret
         )
 
-        r = self.get({
+        r = self._get({
             'url': self.GET_USERINFO_URL,
             'auth': oauth
         })
@@ -74,6 +74,44 @@ class Oauth(Base):
 
     def parse_user_info(self, response):
         raise NotImplementedError('Must implement in subclass')
+
+    def set_access_token(self, access_token):
+        self._access_token = access_token['access_token']
+        self._access_token_secret = access_token['access_token_secret']
+
+    def access_resource(self, method, url, params={}, data={}):
+        oauth = OAuth1(
+            client_key=self._config['client_id'],
+            client_secret=self._config['client_secret'],
+            callback_uri=self._config['redirect_uri'],
+            resource_owner_key=self._access_token,
+            resource_owner_secret=self._access_token_secret
+        )
+
+        r = None
+        if method.lower() == 'get':
+            r = self._get({
+                'url': url,
+                'params': params,
+                'auth': oauth
+            })
+        elif method.lower() == 'post':
+            r = self._post({
+                'url': url,
+                'params': params,
+                'data': data,
+                'auth': oauth
+            })
+        else:
+            r = self._request({
+                'method': method,
+                'url': url,
+                'params': params,
+                'data': data,
+                'auth': oauth
+            })
+
+        return r
 
     def _check_response(self, params):
         if params.get('error', ''):
@@ -86,7 +124,7 @@ class Oauth(Base):
             client_secret=self._config['client_secret'],
             callback_uri=self._config['redirect_uri'],
         )
-        r = self.post({
+        r = self._post({
             'url': self.REQUEST_TOKEN_URL,
             'auth': oauth
         })

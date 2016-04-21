@@ -19,7 +19,7 @@ class Weibo(Oauth2):
         self._expires_in = response.get('expires_in', '')
         self._uid = response.get('uid', '')
 
-    def set_resource_payload(self):
+    def get_user_info_params(self):
         return {
             'access_token': self._access_token,
             'uid': self._uid

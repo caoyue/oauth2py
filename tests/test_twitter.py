@@ -95,6 +95,31 @@ class TestTwitter(unittest.TestCase):
             u'default_profile': False,
             u'is_translator': False
         }
+        self.update_status_resp = {
+            u'contributors': None,
+            u'truncated': False,
+            u'text': u'test from oauth2py!',
+            u'is_quote_status': False,
+            u'in_reply_to_status_id': None,
+            u'id': 723005550229745665L,
+            u'favorite_count': 0,
+            u'source': u'<a href="http://l.caoyue.me" rel="nofollow">EsportsTest</a>',
+            u'retweeted': False,
+            u'coordinates': None,
+            u'entities': {},
+            u'in_reply_to_screen_name': None,
+            u'in_reply_to_user_id': None,
+            u'retweet_count': 0,
+            u'id_str': u'723005550229745665',
+            u'favorited': False,
+            u'user': {},
+            u'geo': None,
+            u'in_reply_to_user_id_str': None,
+            u'lang': u'en',
+            u'created_at': u'Thu Apr 21 04:28:50 +0000 2016',
+            u'in_reply_to_status_id_str': None,
+            u'place': None
+        }
 
         self.twitter = OauthClient.load('twitter')
         self.twitter.init(self.config)
@@ -155,3 +180,31 @@ class TestTwitter(unittest.TestCase):
 
         # assert response uid
         self.assertEqual(user['uid'], self.user_info_resp['id'])
+
+    @mock.patch('oauth2py.base.requests.post')
+    def test_access_resource(self, mock_post):
+        mock_post_response = mock.Mock()
+        mock_post_response.status_code = 200
+        mock_post_response.json.return_value = self.update_status_resp
+        mock_post.return_value = mock_post_response
+
+        self.twitter.set_access_token({
+            'access_token': self.access_oauth_token,
+            'access_token_secret': self.access_oauth_token_secret
+        })
+
+        token = self.twitter.get_access_token()
+        self.assertEqual(
+            token['access_token'],
+            self.access_oauth_token
+        )
+
+        r = self.twitter.access_resource(
+            'POST',
+            url='https://api.twitter.com/1.1/statuses/update.json',
+            data={
+                'status': 'test from oauth2py!'
+            })
+
+        self.assertEqual(mock_post.call_count, 1)
+        self.assertEqual(r['text'], self.update_status_resp['text'])

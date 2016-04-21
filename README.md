@@ -21,6 +21,23 @@ python 2.7
 1. create client
     - put `oauth2py.config.json` in your app folder
 
+    ```json
+    [{
+        "name": "github",
+        "client_id": "",
+        "client_secret": "",
+        "redirect_uri": "",
+        "scope": ""
+    },
+    {
+        "name": "twitter",
+        "client_id": "",
+        "client_secret": "",
+        "redirect_uri": "",
+        "scope": ""
+    }]
+    ```
+
     ```python
     from oauth2py.client import OauthClient as oauth
 
@@ -36,14 +53,14 @@ python 2.7
         'scope': ''
     })
     ```
-
-2. get login url
+2. oauth
+    1. get login url
 
     ```python
     url = github.get_login_url(state='abc')
     ```
 
-3. get user info
+    2. get user info
 
     ```python
     user = github.get_user_info('code=12345&state=abc')
@@ -51,14 +68,42 @@ python 2.7
     user = github.get_user_info({'code': '12345', 'state': 'abc'})
     ```
 
-4. get access token
+    3. save access token
 
     ```python
     token = github.get_access_token()
+    # save token ...
     ```
 
-### add providers
-- inherit `oauth2py.Oauth2` and set oauth urls
+3. access resource
+    - get github repo list
+    ```python
+    github.set_access_token({
+        'access_token': '...'
+    })
+    github.access_resource(
+            'GET', 'https://api.github.com/user/repos')
+    ```
+
+    - another example: post status to twitter
+
+    ```python
+    twitter.set_access_token({
+            'access_token': '...',
+            'access_token_secret': '...'
+        }
+    )
+    twitter.access_resource(
+        'POST',
+        url='https://api.twitter.com/1.1/statuses/update.json',
+        data={
+            'status': 'test from oauth2py!'
+        }
+    )
+    ```
+
+### implement new providers
+- inherit `oauth2py.Oauth2` or `oauth2py.Oauth` and set oauth urls
 
     ```python
     class Github(Oauth2):

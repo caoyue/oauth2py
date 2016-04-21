@@ -1,7 +1,8 @@
 oauth2py
 ~~~~~~~~
 
-|PyPI version| |Build Status|
+| |PyPI version|
+| |Build Status|
 
 a simple, lightweight oauth client
 
@@ -25,73 +26,122 @@ useage
 
 #. create client
 
-    -  put ``oauth2py.config.json`` in your app folder
+   -  put ``oauth2py.config.json`` in your app folder
 
-    .. code:: python
+   .. code:: json
 
-        from oauth2py.client import OauthClient as oauth
+       [{
+           "name": "github",
+           "client_id": "",
+           "client_secret": "",
+           "redirect_uri": "",
+           "scope": ""
+       },
+       {
+           "name": "twitter",
+           "client_id": "",
+           "client_secret": "",
+           "redirect_uri": "",
+           "scope": ""
+       }]
 
-        github = oauth.load('github')
+   .. code:: python
 
-    -  or set config in code
+       from oauth2py.client import OauthClient as oauth
 
-    .. code:: python
+       github = oauth.load('github')
 
-        github.init({
-            'client_id': '',
-            'client_secret': '',
-            'redirect_uri': '',
-            'scope': ''
-        })
+   -  or set config in code
 
-#. get login url
+   .. code:: python
 
-    .. code:: python
+       github.init({
+           'client_id': '',
+           'client_secret': '',
+           'redirect_uri': '',
+           'scope': ''
+       })
 
-        url = github.get_login_url(state='abc')
+#. oauth
 
-#. get user info
+   #. get login url
 
-    .. code:: python
+   .. code:: python
 
-        user = github.get_user_info('code=12345&state=abc')
-        # or
-        user = github.get_user_info({'code': '12345', 'state': 'abc'})
+       url = github.get_login_url(state='abc')
 
-#. get access token
+   #. get user info
 
-    .. code:: python
+   .. code:: python
 
-        token = github.get_access_token()
+       user = github.get_user_info('code=12345&state=abc')
+       # or
+       user = github.get_user_info({'code': '12345', 'state': 'abc'})
 
-add providers
-~~~~~~~~~~~~~
+   #. save access token
 
--  inherit ``oauth2py.Oauth2`` and set oauth urls
+   .. code:: python
 
-    .. code:: python
+       token = github.get_access_token()
+       # save token ...
 
-        class Github(Oauth2):
+#. access resource
 
-            NAME = 'Github'
-            AUTHORIZATION_URL = 'https://github.com/login/oauth/authorize'
-            ACCESS_TOKEN_URL = 'https://github.com/login/oauth/access_token'
-            GET_USERINFO_URL = 'https://api.github.com/user'
+   -  get github repo list
 
-            def __init__(self):
-                super(Github, self).__init__()
+      .. code:: python
+
+          github.set_access_token({
+          'access_token': '...'
+          })
+          github.access_resource(
+              'GET', 'https://api.github.com/user/repos')
+
+   -  another example: post status to twitter
+
+   .. code:: python
+
+       twitter.set_access_token({
+               'access_token': '...',
+               'access_token_secret': '...'
+           }
+       )
+       twitter.access_resource(
+           'POST',
+           url='https://api.twitter.com/1.1/statuses/update.json',
+           data={
+               'status': 'test from oauth2py!'
+           }
+       )
+
+implement new providers
+~~~~~~~~~~~~~~~~~~~~~~~
+
+-  inherit ``oauth2py.Oauth2`` or ``oauth2py.Oauth`` and set oauth urls
+
+   .. code:: python
+
+       class Github(Oauth2):
+
+           NAME = 'Github'
+           AUTHORIZATION_URL = 'https://github.com/login/oauth/authorize'
+           ACCESS_TOKEN_URL = 'https://github.com/login/oauth/access_token'
+           GET_USERINFO_URL = 'https://api.github.com/user'
+
+           def __init__(self):
+               super(Github, self).__init__()
 
 -  parse user info from response
 
-    .. code:: python
+   .. code:: python
 
-        def parse_user_info(self, response):
-            return {
-                'uid': response['id'],
-                'name': response['name'],
-                'avatar': response['avatar_url'],
-                'raw': response
-            }
+       def parse_user_info(self, response):
+           return {
+               'uid': response['id'],
+               'name': response['name'],
+               'avatar': response['avatar_url'],
+               'raw': response
+           }
 
 .. |PyPI version| image:: https://img.shields.io/pypi/v/oauth2py.svg?style=flat
    :target: https://pypi.python.org/pypi/oauth2py

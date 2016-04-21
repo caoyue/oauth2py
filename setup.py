@@ -15,7 +15,7 @@ def long_description():
 
 config = {
     'name': 'oauth2py',
-    'version': '1.0.1',
+    'version': '1.1.0',
     'description': 'a simple, lightweight oauth client',
     'author': 'caoyue',
     'author_email': 'i@caoyue.me',

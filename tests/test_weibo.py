@@ -103,6 +103,40 @@ class TestWeibo(unittest.TestCase):
             u'pagefriends_count': 0,
             u'user_ability': 0
         }
+        self.update_status_resp = {
+            u'reposts_count': 0,
+            u'biz_feature': 0,
+            u'truncated': False,
+            u'text': u'test form oauth2py',
+            u'visible': {
+                u'type': 0,
+                u'list_id': 0
+            },
+            u'in_reply_to_status_id': u'',
+            u'id': 3966673319378780,
+            u'mid': u'3966673319378780',
+            u'userType': 257,
+            u'source': u'<a href="http://open.weibo.com" rel="nofollow">\u672a\u901a\u8fc7\u5ba1\u6838\u5e94\u7528</a>',
+            u'attitudes_count': 0,
+            u'in_reply_to_screen_name': u'',
+            u'pic_urls': [],
+            u'in_reply_to_user_id': u'',
+            u'darwin_tags': [],
+            u'favorited': False,
+            u'text_tag_tips': [],
+            u'source_allowclick': 0,
+            u'idstr': u'3966673319378780',
+            u'source_type': 1,
+            u'user': {},
+            u'hot_weibo_tags': [],
+            u'geo': None,
+            u'isLongText': False,
+            u'textLength': 18,
+            u'created_at': u'Thu Apr 21 12:14:39    +0800 2016',
+            u'mlevel': 0,
+            u'comments_count': 0
+        }
+
         self.weibo = OauthClient.load('weibo')
         self.weibo.init(self.config)
 
@@ -156,3 +190,28 @@ class TestWeibo(unittest.TestCase):
 
         # assert response uid
         self.assertEqual(user['uid'], self.user_info_resp['id'])
+
+    @mock.patch('oauth2py.base.requests.post')
+    def test_access_resource(self, mock_post):
+        mock_post_response = mock.Mock()
+        mock_post_response.status_code = 200
+        mock_post_response.json.return_value = self.update_status_resp
+        mock_post.return_value = mock_post_response
+
+        self.weibo.set_access_token(self.access_token_resp)
+
+        token = self.weibo.get_access_token()
+        self.assertEqual(
+            token['access_token'],
+            self.access_token_resp['access_token']
+        )
+
+        r = self.weibo.access_resource(
+            method='POST',
+            url='https://api.weibo.com/2/statuses/update.json',
+            data={
+                'status': 'test from oauth2py!'
+            })
+
+        self.assertEqual(mock_post.call_count, 1)
+        self.assertEqual(r['text'], self.update_status_resp['text'])

@@ -54,6 +54,7 @@ class TestGithub(unittest.TestCase):
             u'following': 1,
             u'login': u'caoyue'
         }
+        self.access_resource_resp = {}
         self.github = OauthClient.load('github')
         self.github.init(self.config)
 
@@ -107,3 +108,23 @@ class TestGithub(unittest.TestCase):
 
         # assert response uid
         self.assertEqual(user['uid'], self.user_info_resp['id'])
+
+    @mock.patch('oauth2py.base.requests.get')
+    def test_access_resource(self, mock_get):
+        mock_get_response = mock.Mock()
+        mock_get_response.status_code = 200
+        mock_get_response.json.return_value = self.access_resource_resp
+        mock_get.return_value = mock_get_response
+
+        self.github.set_access_token(self.access_token_resp)
+
+        token = self.github.get_access_token()
+        self.assertEqual(
+            token['access_token'],
+            self.access_token_resp['access_token']
+        )
+
+        r = self.github.access_resource(
+            'GET', 'https://api.github.com/user/repos')
+
+        self.assertEqual(mock_get.call_count, 1)

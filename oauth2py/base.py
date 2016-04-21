@@ -31,7 +31,13 @@ class Base(object):
     def get_user_info(self):
         raise NotImplementedError('Must implement in subclass')
 
-    def get(self, request):
+    def set_access_token(self):
+        raise NotImplementedError('Must implement in subclass')
+
+    def access_resource(self):
+        raise NotImplementedError('Must implement in subclass')
+
+    def _get(self, request):
         r = None
         try:
             r = requests.get(request.get('url'),
@@ -50,13 +56,37 @@ class Base(object):
         except ValueError, e:
             return r.content
 
-    def post(self, request):
+    def _post(self, request):
         r = None
         try:
             r = requests.post(request.get('url'),
-                              data=request.get('params'),
+                              params=request.get('params'),
+                              data=request.get('data'),
                               headers={'Accept': 'application/json'},
                               auth=request.get('auth'))
+        except requests.ConnectionError, e:
+            raise AuthorizeException('Connection error: {0}'.format(e))
+        else:
+            if r.status_code != 200:
+                raise AuthorizeException(
+                    'Authorization failed: {0}'.format(r.content))
+
+        try:
+            return r.json()
+        except ValueError, e:
+            return r.content
+
+    def _request(self, request):
+        r = None
+        try:
+            r = requests.request(
+                method=request.get('method', 'GET'),
+                url=request.get('url'),
+                params=request.get('params'),
+                data=request.get('data'),
+                headers={'Accept': 'application/json'},
+                auth=request.get('auth')
+            )
         except requests.ConnectionError, e:
             raise AuthorizeException('Connection error: {0}'.format(e))
         else:
