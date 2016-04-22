@@ -107,7 +107,7 @@ class TestGithub(unittest.TestCase):
         )
 
         # assert response uid
-        self.assertEqual(user['uid'], self.user_info_resp['id'])
+        self.assertEqual(user['uid'], str(self.user_info_resp['id']))
 
     @mock.patch('oauth2py.base.requests.get')
     def test_access_resource(self, mock_get):

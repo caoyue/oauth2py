@@ -17,7 +17,7 @@ class Twitter(Oauth):
 
     def parse_user_info(self, response):
         return {
-            'uid': response.get('id'),
+            'uid': response.get('id_str'),
             'name': response.get('name'),
             'avatar': response.get('profile_image_url_https'),
             'raw': response

@@ -27,7 +27,7 @@ class Weibo(Oauth2):
 
     def parse_user_info(self, response):
         return {
-            'uid': response.get('id'),
+            'uid': response.get('idstr'),
             'name': response.get('name'),
             'avatar': response.get('profile_image_url'),
             'raw': response

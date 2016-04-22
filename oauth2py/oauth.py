@@ -10,7 +10,6 @@ class Oauth(Base):
 
     def __init__(self):
         super(Oauth, self).__init__()
-        self._oauth = None
 
     def get_login_url(self):
         self._check_config()

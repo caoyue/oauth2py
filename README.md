@@ -77,6 +77,7 @@ python 2.7
 
 3. access resource
     - get github repo list
+
     ```python
     github.set_access_token({
         'access_token': '...'
@@ -123,9 +124,9 @@ python 2.7
     ```python
     def parse_user_info(self, response):
         return {
-            'uid': response['id'],
-            'name': response['name'],
-            'avatar': response['avatar_url'],
+            'uid': str(response.get('id')),
+            'name': response.get('name'),
+            'avatar': response.get('avatar_url'),
             'raw': response
         }
     ```

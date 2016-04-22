@@ -179,7 +179,7 @@ class TestTwitter(unittest.TestCase):
         )
 
         # assert response uid
-        self.assertEqual(user['uid'], self.user_info_resp['id'])
+        self.assertEqual(user['uid'], self.user_info_resp['id_str'])
 
     @mock.patch('oauth2py.base.requests.post')
     def test_access_resource(self, mock_post):

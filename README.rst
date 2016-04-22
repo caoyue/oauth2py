@@ -90,11 +90,12 @@ useage
    -  get github repo list
 
    .. code:: python
+
        github.set_access_token({
-       'access_token': '...'
+           'access_token': '...'
        })
        github.access_resource(
-           'GET', 'https://api.github.com/user/repos')
+               'GET', 'https://api.github.com/user/repos')
 
    -  another example: post status to twitter
 
@@ -136,9 +137,9 @@ implement new providers
 
        def parse_user_info(self, response):
            return {
-               'uid': response['id'],
-               'name': response['name'],
-               'avatar': response['avatar_url'],
+               'uid': str(response.get('id')),
+               'name': response.get('name'),
+               'avatar': response.get('avatar_url'),
                'raw': response
            }
 
