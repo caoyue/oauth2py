@@ -124,7 +124,7 @@ class TestGithub(unittest.TestCase):
             self.access_token_resp['access_token']
         )
 
-        r = self.github.access_resource(
+        self.github.access_resource(
             'GET', 'https://api.github.com/user/repos')
 
         self.assertEqual(mock_get.call_count, 1)

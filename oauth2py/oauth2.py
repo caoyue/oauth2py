@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import json
-
 from base import Base
 from exceptions import OauthException
 
@@ -33,7 +31,7 @@ class Oauth2(Base):
         })
 
     def get_access_token(self, refresh_token=''):
-        '''get access_token, or use refresh_token update access_token'''
+        """access_token, or use refresh_token update access_token."""
         self._check_config()
 
         if refresh_token:

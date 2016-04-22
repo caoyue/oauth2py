@@ -13,7 +13,7 @@ def get_configs():
             with open(f) as data:
                 return json.load(data)
         except Exception, e:
-            raise 'could not load configs!'
+            raise 'could not load configs: {0}!'.format(e)
 
 
 class OauthClient(object):
