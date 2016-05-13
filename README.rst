@@ -3,6 +3,7 @@ oauth2py
 
 | |PyPI version|
 | |Build Status|
+| |Coverage Status|
 
 a simple, lightweight oauth client
 
@@ -143,7 +144,10 @@ implement new providers
                'raw': response
            }
 
+
 .. |PyPI version| image:: https://img.shields.io/pypi/v/oauth2py.svg?style=flat
    :target: https://pypi.python.org/pypi/oauth2py
 .. |Build Status| image:: https://img.shields.io/travis/shadowsocks/shadowsocks/master.svg?style=flat
    :target: https://travis-ci.org/caoyue/oauth2py
+.. |Coverage Status| image:: https://coveralls.io/repos/github/caoyue/oauth2py/badge.svg?branch=master
+   :target: https://coveralls.io/github/caoyue/oauth2py?branch=master

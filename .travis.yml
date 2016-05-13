@@ -8,4 +8,6 @@ install:
     - pip install -r tests/requirements.txt
 script:
     - pep8 --ignore=E501 .
-    - python tests/test.py
+    - coverage run --source=oauth2py tests/test.py
+after_success:
+    - coveralls

@@ -2,6 +2,7 @@
 ### oauth2py
 [![PyPI version]][PyPI]
 [![Build Status]][Travis CI]
+[![Coverage Status]][Coverage]
 
 a simple, lightweight oauth client
 
@@ -136,3 +137,5 @@ python 2.7
 [PyPI version]:      https://img.shields.io/pypi/v/oauth2py.svg?style=flat
 [Build Status]:      https://img.shields.io/travis/shadowsocks/shadowsocks/master.svg?style=flat
 [Travis CI]:         https://travis-ci.org/caoyue/oauth2py
+[Coverage Status]:   https://coveralls.io/repos/github/caoyue/oauth2py/badge.svg?branch=master
+[Coverage]:          https://coveralls.io/github/caoyue/oauth2py?branch=master
