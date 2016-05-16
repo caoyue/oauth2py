@@ -16,7 +16,7 @@ supported
 ~~~~~~~~~
 
 -  [x] Weibo
--  [ ] QQ
+-  [x] QQ
 -  [x] Facebook
 -  [x] Github
 -  [x] Twitter

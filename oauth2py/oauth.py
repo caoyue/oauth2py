@@ -22,7 +22,7 @@ class Oauth(Base):
     def get_request_token(self):
         return self._request_token
 
-    def get_access_token(self, verifier=''):
+    def get_access_token(self, verifier=None):
         if verifier:
             oauth = OAuth1(
                 client_key=self._config['client_id'],
@@ -47,7 +47,7 @@ class Oauth(Base):
             'access_token_secret': self._access_token_secret
         }
 
-    def get_user_info(self, query, request_token={}):
+    def get_user_info(self, query, request_token=None):
         params = query
         if not type(query) is dict:
             params = self._query_to_dict(query)
@@ -79,7 +79,7 @@ class Oauth(Base):
         self._access_token = access_token['access_token']
         self._access_token_secret = access_token['access_token_secret']
 
-    def access_resource(self, method, url, params={}, data={}):
+    def access_resource(self, method, url, params=None, data=None):
         self._check_config()
 
         oauth = OAuth1(

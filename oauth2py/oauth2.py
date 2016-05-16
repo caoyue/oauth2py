@@ -10,7 +10,7 @@ class Oauth2(Base):
     def __init__(self):
         super(Oauth2, self).__init__()
 
-    def get_login_url(self, state=''):
+    def get_login_url(self, state=None):
         self._check_config()
 
         params = {
@@ -30,7 +30,7 @@ class Oauth2(Base):
             'params': params
         })
 
-    def get_access_token(self, refresh_token=''):
+    def get_access_token(self, refresh_token=None):
         """access_token, or use refresh_token update access_token."""
         self._check_config()
 
@@ -73,8 +73,11 @@ class Oauth2(Base):
         self._access_token = access_token['access_token']
         self._expires_in = access_token.get('expires_in')
 
-    def access_resource(self, method, url, params={}, data={}):
+    def access_resource(self, method, url, params=None, data=None):
         self._check_config()
+
+        if not params:
+            params = {}
 
         params['access_token'] = self._access_token
 
