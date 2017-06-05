@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from base import Base
 from requests_oauthlib import OAuth1
-from exceptions import AuthorizeException
+
+from .base import Base
+from .exceptions import AuthorizeException
 
 
 class Oauth(Base):

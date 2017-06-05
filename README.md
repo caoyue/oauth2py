@@ -8,7 +8,8 @@ a simple, lightweight oauth client
 
 ### require
 
-python 2.7
++ python 2.7+
++ python 3.3+
 
 ### supported
 - [x] Weibo

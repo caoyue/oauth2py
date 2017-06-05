@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from oauth2 import Oauth2
+from .oauth2 import Oauth2
 
 
 class Facebook(Oauth2):

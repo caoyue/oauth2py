@@ -2,7 +2,9 @@
 # -*- coding: utf-8 -*-
 
 import requests
-from exceptions import AuthorizeException
+from collections import OrderedDict
+
+from .exceptions import AuthorizeException
 
 
 class Base(object):
@@ -44,7 +46,7 @@ class Base(object):
                              params=request.get('params'),
                              headers={'Accept': 'application/json'},
                              auth=request.get('auth'))
-        except requests.ConnectionError, e:
+        except requests.ConnectionError as e:
             raise AuthorizeException('Connection error: {0}'.format(e))
         else:
             if r.status_code != 200:
@@ -53,7 +55,7 @@ class Base(object):
 
         try:
             return r.json()
-        except ValueError, e:
+        except ValueError as e:
             return r.content
 
     def _post(self, request):
@@ -64,7 +66,7 @@ class Base(object):
                               data=request.get('data'),
                               headers={'Accept': 'application/json'},
                               auth=request.get('auth'))
-        except requests.ConnectionError, e:
+        except requests.ConnectionError as e:
             raise AuthorizeException('Connection error: {0}'.format(e))
         else:
             if r.status_code != 200:
@@ -73,7 +75,7 @@ class Base(object):
 
         try:
             return r.json()
-        except ValueError, e:
+        except ValueError as e:
             return r.content
 
     def _request(self, request):
@@ -87,7 +89,7 @@ class Base(object):
                 headers={'Accept': 'application/json'},
                 auth=request.get('auth')
             )
-        except requests.ConnectionError, e:
+        except requests.ConnectionError as e:
             raise AuthorizeException('Connection error: {0}'.format(e))
         else:
             if r.status_code != 200:
@@ -96,13 +98,16 @@ class Base(object):
 
         try:
             return r.json()
-        except ValueError, e:
+        except ValueError as e:
             return r.content
 
     def _build_request_uri(self, request):
+        d = request.get('params')
+        o_dict = OrderedDict(
+            sorted(d.items(), key=lambda x: x[0], reverse=False))
         params = '&'.join(
             ['{0}={1}'.format(x, y)
-             for x, y in request.get('params').iteritems()])
+             for x, y in o_dict.items()])
         return '{0}?{1}'.format(request.get('url'), params)
 
     def _query_to_dict(self, query):

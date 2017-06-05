@@ -12,7 +12,7 @@ def get_configs():
         try:
             with open(f) as data:
                 return json.load(data)
-        except Exception, e:
+        except Exception as e:
             raise 'could not load configs: {0}!'.format(e)
 
 

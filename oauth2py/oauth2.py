@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from base import Base
-from exceptions import OauthException
+from .base import Base
+from .exceptions import OauthException
 
 
 class Oauth2(Base):

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import json
-from oauth2 import Oauth2
+from .oauth2 import Oauth2
 
 
 class Qq(Oauth2):

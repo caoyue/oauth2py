@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from oauth import Oauth
+from .oauth import Oauth
 
 
 class Twitter(Oauth):
